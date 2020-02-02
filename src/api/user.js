@@ -23,3 +23,5 @@ export const getSmsCode = mobile => { // 获取验证码
     url: `/app/v1_0/sms/codes/${mobile}`
   })
 }
+// 获取用户个人信息
+export const getUserinfo = () => request({ url: `/app/v1_0/user` })

@@ -47,6 +47,8 @@
 
 <script>
 import { login, getSmsCode } from '@/api/user'
+import { validate } from 'vee-validate'
+// 此方法专门用来验证某个字段 与this.$refs.form.validate()不是一回事
 export default {
   name: 'loginPage',
   data () {
@@ -90,6 +92,13 @@ export default {
     },
     async onSendSmsCode () {
       const { mobile } = this.user
+      let res = await validate(mobile, 'required|mobile', { name: '手机号' })
+      // console.log(res)
+      if (!res.valid) {
+        // 提示 return
+        this.$toast(res.errors[0])
+        return
+      }
       try {
         this.countdownShow = true
         await getSmsCode(mobile)

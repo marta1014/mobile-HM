@@ -82,6 +82,7 @@ export default {
       })
       try {
         this.$toast.success('登陆成功')
+        this.$router.push('/')
         const res = await login(user)
         // console.log(res)
         // 将登陆状态存储vuex容器中

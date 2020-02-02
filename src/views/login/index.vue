@@ -1,14 +1,21 @@
 <template>
   <div class="loginPage">
     <van-nav-bar title="登陆" />
-    <van-cell-group>
+    <ValidationObserver ref="form">
+    <ValidationProvider
+    name="手机号"
+    rules="required"
+    >
       <van-field
       required
       v-model="user.mobile"
       label="手机号"
       placeholder="请输入用户名" />
-    </van-cell-group>
-    <van-cell-group>
+      <!-- {{errors[0]}} -->
+    </ValidationProvider>
+    <ValidationProvider
+    name="验证码"
+    rules="required">
       <van-field
       required
       v-model="user.code"
@@ -27,7 +34,8 @@
         @click="onSendSmsCode"
         type="primary">发送验证码</van-button>
       </van-field>
-    </van-cell-group>
+    </ValidationProvider>
+    </ValidationObserver>
     <van-cell>
         <van-button type="info"
         @click="onLogin"
@@ -52,6 +60,18 @@ export default {
   methods: {
     async onLogin () {
       const user = this.user
+      const success = await this.$refs.form.validate()
+      if (!success) {
+        setTimeout(() => {
+          const { errors } = this.$refs.form
+          //   console.log(errors, '失败')
+          // 获取错误对象 => 对象.values => 遍历/return 第一个错误 => 轻提示文本
+          //   const item = Object.values(errors).find(item => { return item[0] })
+          const item = Object.values(errors).find(item => item[0])
+          this.$toast(item[0])
+        }, 100)
+        return
+      }
       this.$toast.loading({
         duration: 0, // 持续展示 toast
         message: '加载中...',

@@ -11,8 +11,15 @@ import request from '@/utils/request'
 //     //data  body参数
 //   })
 // }
-export const login = data => request({
+export const login = data => request({// 登录
   url: '/app/v1_0/authorizations',
   method: 'post',
   data
 })
+
+export const getSmsCode = mobile => { // 获取验证码
+  return request({
+    method: 'GET',
+    url: `/app/v1_0/sms/codes/${mobile}`
+  })
+}

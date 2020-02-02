@@ -18,11 +18,13 @@
         slot="button"
         format="ss s"
         v-if="countdownShow"
+        @finish="countdownShow = false"
         :time="1000*60" />
         <van-button
         v-else
         slot="button"
         size="small"
+        @click="onSendSmsCode"
         type="primary">发送验证码</van-button>
       </van-field>
     </van-cell-group>
@@ -35,14 +37,14 @@
 </template>
 
 <script>
-import { login } from '@/api/user'
+import { login, getSmsCode } from '@/api/user'
 export default {
   name: 'loginPage',
   data () {
     return {
       user: {
         mobile: '13911111111',
-        code: '246810'
+        code: ''
       },
       countdownShow: false
     }
@@ -61,7 +63,22 @@ export default {
         console.log(res)
       } catch (error) {
         this.$toast.fail('登陆失败')
-        console.log(error)
+        this.countdownShow = false
+        // console.log(error)
+      }
+    },
+    async onSendSmsCode () {
+      const { mobile } = this.user
+      try {
+        this.countdownShow = true
+        await getSmsCode(mobile)
+      } catch (error) {
+        // console.log(error)
+        this.countdownShow = false
+        if (error.response.status === 429) {
+          this.$toast('请勿频繁发送')
+        }
+        this.$toast.fail('发送失败')
       }
     }
   }

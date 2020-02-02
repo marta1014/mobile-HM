@@ -4,7 +4,7 @@
     <ValidationObserver ref="form">
     <ValidationProvider
     name="手机号"
-    rules="required"
+    rules="required|mobile"
     >
       <van-field
       required
@@ -15,12 +15,13 @@
     </ValidationProvider>
     <ValidationProvider
     name="验证码"
-    rules="required">
+    rules="required|code"
+    >
       <van-field
       required
       v-model="user.code"
       label="验证码"
-      placeholder="请输入用户名">
+      placeholder="请输入验证码">
         <van-count-down
         slot="button"
         format="ss s"
@@ -51,7 +52,7 @@ export default {
   data () {
     return {
       user: {
-        mobile: '13911111111',
+        mobile: '',
         code: ''
       },
       countdownShow: false
@@ -61,12 +62,12 @@ export default {
     async onLogin () {
       const user = this.user
       const success = await this.$refs.form.validate()
-      if (!success) {
+      if (!success) { // 验证失败 提示并return
         setTimeout(() => {
           const { errors } = this.$refs.form
           //   console.log(errors, '失败')
-          // 获取错误对象 => 对象.values => 遍历/return 第一个错误 => 轻提示文本
-          //   const item = Object.values(errors).find(item => { return item[0] })
+          // 获取错误对象 => 对象.values得到数组 => 遍历/return 第一个错误 => 轻提示文本
+          // const item = Object.values(errors).find(item => { return item[0] })
           const item = Object.values(errors).find(item => item[0])
           this.$toast(item[0])
         }, 100)

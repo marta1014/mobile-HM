@@ -83,7 +83,9 @@ export default {
       try {
         this.$toast.success('登陆成功')
         const res = await login(user)
-        console.log(res)
+        // console.log(res)
+        // 将登陆状态存储vuex容器中
+        this.$store.commit('setUser', res.data.data)
       } catch (error) {
         this.$toast.fail('登陆失败')
         this.countdownShow = false

@@ -14,7 +14,13 @@
       v-model="user.code"
       label="验证码"
       placeholder="请输入用户名">
+        <van-count-down
+        slot="button"
+        format="ss s"
+        v-if="countdownShow"
+        :time="1000*60" />
         <van-button
+        v-else
         slot="button"
         size="small"
         type="primary">发送验证码</van-button>
@@ -37,7 +43,8 @@ export default {
       user: {
         mobile: '13911111111',
         code: '246810'
-      }
+      },
+      countdownShow: false
     }
   },
   methods: {

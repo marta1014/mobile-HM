@@ -31,6 +31,7 @@
 
 <script>
 import { getAllChannels } from '@/api/article'
+import { setItem } from '@/utils/storage'
 export default {
   name: 'channel-edit',
   props: {
@@ -88,6 +89,11 @@ export default {
      * 判断如果该项在我的频道项不包含
      * 将其push到一个新数组后将其return
      */
+  },
+  watch: {
+    myChannels () {
+      setItem('user-channels', this.myChannels)
+    }
   }
 }
 </script>
@@ -99,7 +105,7 @@ export default {
 }
 /deep/ .van-grid-item__content{
   position: relative;
-  /deep/ .van-grid-item__icon-wrapper{
+  .van-grid-item__icon-wrapper{
     position: absolute;
     top: -10px;
     right: -6px;

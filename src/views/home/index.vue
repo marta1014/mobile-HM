@@ -43,22 +43,29 @@
 
 <script>
 import { getChannels } from '@/api/user'
+import { getItem } from '@/utils/storage'
 export default {
   name: 'homePage',
   data () {
     return {
       active: 0,
       channels: [],
-      popupShow: true
+      popupShow: false
     }
   },
   methods: {
     async getUserChannels () {
-      try {
-        const { data } = await getChannels()
-        this.channels = data.data.channels
-      } catch (error) {
-        console.log(error)
+      let localChannels = getItem('user-channels')
+      // 如果本地有 用本地 没有 则请求获取
+      if (localChannels) {
+        this.channels = localChannels
+      } else {
+        try {
+          const { data } = await getChannels()
+          this.channels = data.data.channels
+        } catch (error) {
+          console.log(error)
+        }
       }
     }
   },
@@ -97,10 +104,11 @@ export default {
     background-color: #fff;
   }
  .van-popup{
-  /deep/ .van-popup__close-icon--top-right{
+  /deep/ .van-popup__close-icon{
+    position: fixed;
     left: 20px;
     top: 60px;
-    z-index: -1;
+    // z-index: -1;
   }
  }
 }

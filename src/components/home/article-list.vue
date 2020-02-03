@@ -61,11 +61,27 @@ export default {
         this.finished = true
       }
     },
-    onRefresh () {
-      setTimeout(() => {
-        this.$toast('刷新成功')
-        this.isLoading = false
-      }, 1000)
+    /**
+     * 思路：
+     * 注册下拉刷新事件（组件）的处理函数
+     * 发送请求获取文章列表数据
+     * 把获取到的数据添加到当前频道的文章列表的顶部
+     * 提示用户刷新成功！
+     * 下拉刷新时会触发组件的 refresh 事件，
+     * 在事件的回调函数中可以进行同步或异步操作，
+     * 操作完成后将 v-model 设置为 false，表示加载完成。
+     */
+    async onRefresh () {
+      const { data } = await getArticles({
+        channel_id: this.channel.id,
+        timestamp: Date.now(),
+        with_top: 1
+      })
+      const { results } = data.data
+      this.list.unshift(...results)
+      // 关闭loading 提示刷新成功
+      this.isLoading = false
+      this.$toast(`更新了${results.length}条数据`)
     }
   }
 }

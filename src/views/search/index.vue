@@ -37,7 +37,7 @@
           <van-icon name="delete"></van-icon>
           <span>全部删除</span>&nbsp;<span>完成</span>
       </van-cell>
-      <van-cell title="单元格" >
+      <van-cell :title="item" v-for="(item,index) of historysSearch" :key="index">
           <van-icon name="close"></van-icon>
       </van-cell>
     </van-cell-group>
@@ -47,17 +47,25 @@
 
 <script>
 import { getSuggest } from '@/api/search'
+import { getItem, setItem } from '@/utils/storage'
 export default {
   name: 'searchPage',
   data () {
     return {
       searchText: '',
       resShow: false,
-      suggest: []
+      suggest: [],
+      historysSearch: getItem('history-search') || []
     }
   },
   methods: {
     onSearch () {
+      // 记录搜索记录
+      const index = this.historysSearch.indexOf(this.searchText)
+      if (index !== -1) {
+        this.historysSearch.splice(index, 1)
+      }
+      this.historysSearch.unshift(this.searchText)
       this.resShow = true
     },
     async searchInput () {
@@ -80,7 +88,11 @@ export default {
       this.resShow = true
     }
   },
-  watch: {},
+  watch: {
+    historysSearch () {
+      setItem('history-search', this.historysSearch)
+    }
+  },
   created () {}
 }
 </script>

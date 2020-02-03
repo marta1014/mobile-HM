@@ -25,7 +25,7 @@
     v-for="(item,index) of suggest"
     :key="index"
     icon="search">
-    <div slot="title" v-html="highlight(item)"></div>
+    <div slot="title" v-html="highlight(item,searchText)"></div>
     </van-cell>
     </van-cell-group>
     <!-- /联想建议 -->
@@ -67,9 +67,10 @@ export default {
       this.suggest = data.data.options
     //   console.log(data)
     },
-    highlight (str) {
-      let newStr = `<span style="color:red">${str}</span>`
-      return str.toLowerCase().replace(this.searchText.toLowerCase(), newStr)
+    highlight (source, keyword) {
+      const reg = new RegExp(keyword, 'gi')
+      const str = `<span style="color:#f00">${keyword}</span>`
+      return source.replace(reg, str)
     }
   },
   watch: {},

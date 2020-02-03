@@ -14,6 +14,13 @@
         <!-- /文章列表 -->
       </van-tab>
     </van-tabs>
+    <van-popup
+    closeable
+    v-model="isEditShow"
+    position="bottom"
+    close-icon-position="top-left"
+    :style="{ height: '90%' }"
+    ></van-popup>
     <!-- /频道列表 -->
   </div>
 </template>
@@ -25,7 +32,8 @@ export default {
   data () {
     return {
       active: 0,
-      channels: []
+      channels: [],
+      isEditShow: true
     }
   },
   methods: {

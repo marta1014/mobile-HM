@@ -1,15 +1,22 @@
 <template>
   <div class="channel-edit">
      <van-cell class="channel-title" title="我的频道" :border="false">
-        <van-button size="mini" round type="danger" plain>编辑</van-button>
+        <van-button size="mini" round
+        @click="delIcon = !delIcon"
+        type="danger" plain>{{delIcon ? '完成' : '编辑'}}</van-button>
      </van-cell>
-     <van-grid>
-      <van-grid-item :text="item.name" v-for="item of myChannels" :key="item.id"/>
+     <van-grid :gutter="10">
+      <van-grid-item :text="item.name"
+      v-for="item of myChannels"
+      :key="item.id">
+      <span slot="icon" v-show="delIcon">*</span>
+      <!-- <van-icon slot="icon" name="close"></van-icon> -->
+      </van-grid-item>
     </van-grid>
 
      <van-cell  title="推荐频道" :border="false">
      </van-cell>
-     <van-grid>
+     <van-grid :gutter="10">
       <van-grid-item
       @click="onAdd(item)"
       :text="item.name"
@@ -31,7 +38,8 @@ export default {
   },
   data () {
     return {
-      allChannels: []
+      allChannels: [],
+      delIcon: false
     }
   },
   methods: {
@@ -71,6 +79,16 @@ export default {
 .channel-edit {
 .channel-title{
   margin-top: 60px;
+}
+/deep/ .van-grid-item__content{
+  position: relative;
+  .van-grid-item__icon-wrapper{
+    position: absolute;
+    top: -10px;
+    right: -6px;
+    z-index: 10;
+    color: #f00;
+  }
 }
 }
 

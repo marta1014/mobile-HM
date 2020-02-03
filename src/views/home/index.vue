@@ -6,6 +6,8 @@
 
     <!-- 频道列表 -->
     <van-tabs v-model="active">
+      <van-icon @click="isEditShow = true"
+      name="wap-nav" slot="nav-right"></van-icon>
       <van-tab :title="item.name"
       v-for="item of channels" :key="item.id">
 
@@ -19,7 +21,7 @@
     v-model="isEditShow"
     position="bottom"
     close-icon-position="top-left"
-    :style="{ height: '90%' }"
+    :style="{ height: '100%' }"
     ></van-popup>
     <!-- /频道列表 -->
   </div>
@@ -33,7 +35,7 @@ export default {
     return {
       active: 0,
       channels: [],
-      isEditShow: true
+      isEditShow: false
     }
   },
   methods: {
@@ -67,7 +69,13 @@ export default {
 .home{
   padding-top: 90px;
   padding-bottom: 50px;
-  /deep/ .van-tabs__wrap{
+  /deep/ .van-icon{
+    position: fixed;
+    right: 0;
+    line-height: 44px;
+    background-color: #fff;
+  }
+  /deep/ .van-tabs__wrap {
     position: fixed;
     top: 46px;
     left: 0;

@@ -24,6 +24,7 @@
     <van-cell
     v-for="(item,index) of suggest"
     :key="index"
+    @click="clickSuggest(item)"
     icon="search">
     <div slot="title" v-html="highlight(item,searchText)"></div>
     </van-cell>
@@ -71,6 +72,12 @@ export default {
       const reg = new RegExp(keyword, 'gi')
       const str = `<span style="color:#f00">${keyword}</span>`
       return source.replace(reg, str)
+    },
+    clickSuggest (item) {
+      // 搜索框文本更新
+      this.searchText = item
+      // 展示搜索结果
+      this.resShow = true
     }
   },
   watch: {},

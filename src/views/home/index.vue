@@ -6,7 +6,7 @@
 
     <!-- 频道列表 -->
     <van-tabs v-model="active">
-      <van-icon @click="popupShow = true"
+      <van-icon class="tab-btn" @click="popupShow = true"
       name="wap-nav" slot="nav-right"></van-icon>
       <van-tab :title="item.name"
       v-for="item of channels" :key="item.id">
@@ -22,7 +22,20 @@
         closeable
         round
         :style="{ height: '94%' }">
-        <channel-edit :myChannels="channels"></channel-edit>
+        <!--
+        默认传递一个名字叫value的数据给子组件 ：value=“active”
+        默认监听名字叫input的自定义事件 @input=“active=事件参数”
+        当子组件发布this.$emit('input', 数据)
+        这里使用 v-model   绑定了 active 数据
+        子组件在内部需要声明 value 属性接收使用
+        子组件需要在内部通过 this.$emit('input', 数据) 修改该数据
+
+        什么时候用？
+        父子组件需要同步一些数据的时候，更简洁 本质还是父子通信
+        -->
+        <channel-edit :myChannels="channels"
+        @close="popupShow = false"
+        v-model="active"></channel-edit>
         </van-popup>
     <!-- /频道列表 -->
   </div>
@@ -77,7 +90,7 @@ export default {
     right: 0;
     z-index: 1;
   }
-  /deep/ .van-icon{
+  /deep/ .tab-btn{
     position: fixed;
     right: 0;
     line-height: 44px;

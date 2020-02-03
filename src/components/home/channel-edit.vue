@@ -6,11 +6,12 @@
         type="danger" plain>{{delIcon ? '完成' : '编辑'}}</van-button>
      </van-cell>
      <van-grid :gutter="10">
-      <van-grid-item :text="item.name"
-      v-for="item of myChannels"
+      <van-grid-item
+      @click="myChannelClick(index)"
+      v-for="(item,index) of myChannels"
       :key="item.id">
-      <span slot="icon" v-show="delIcon">*</span>
-      <!-- <van-icon slot="icon" name="close"></van-icon> -->
+      <van-icon class="delIcon" slot="icon" v-show="delIcon" name="close"></van-icon>
+      <span slot="text" class="text" :class="{active:value === index}">{{item.name}}</span>
       </van-grid-item>
     </van-grid>
 
@@ -34,6 +35,10 @@ export default {
     myChannels: {
       type: Array,
       required: true
+    },
+    value: {
+      type: Number,
+      required: true
     }
   },
   data () {
@@ -51,6 +56,16 @@ export default {
     onAdd (item) {
       this.myChannels.push(item)
       console.log(this.myChannels)
+    },
+    myChannelClick (index) {
+      // 编辑状态 删除
+      if (this.delIcon && index !== 0) {
+        this.myChannels.splice(index, 1)
+      } else {
+        this.$emit('input', index)
+        // 通知父组件关闭弹层
+        this.$emit('close')
+      }
     }
   },
   created () {
@@ -82,14 +97,19 @@ export default {
 }
 /deep/ .van-grid-item__content{
   position: relative;
-  .van-grid-item__icon-wrapper{
+  /deep/ .van-grid-item__icon-wrapper{
     position: absolute;
     top: -10px;
     right: -6px;
-    z-index: 10;
     color: #f00;
+    font-size: 16px;
+    z-index: 10;
   }
 }
+.text {
+  font-size: 12px;
+}
+.active{color: #f00}
 }
 
 </style>

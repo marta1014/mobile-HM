@@ -7,6 +7,7 @@
         show-action
         placeholder="请输入搜索关键词"
         @search="onSearch"
+        @input="searchInput"
         @focus="resShow = false"
         @cancel="$router.back()"
       />
@@ -20,8 +21,11 @@
 
     <!-- 联想建议 -->
     <van-cell-group v-else-if="searchText">
-      <van-cell title="单元格" icon="search" />
-      <van-cell title="单元格" icon="search" />
+      <van-cell
+      :title="item"
+      v-for="(item,index) of suggest"
+      :key="index"
+      icon="search" />
     </van-cell-group>
     <!-- /联想建议 -->
 
@@ -40,17 +44,27 @@
 </template>
 
 <script>
+import { getSuggest } from '@/api/search'
 export default {
   name: 'searchPage',
   data () {
     return {
       searchText: '',
-      resShow: false
+      resShow: false,
+      suggest: []
     }
   },
   methods: {
     onSearch () {
       this.resShow = true
+    },
+    async searchInput () {
+      if (!this.searchText) { // 非空判断 避免空数据请求
+        return
+      }
+      const { data } = await getSuggest(this.searchText)
+      this.suggest = data.data.options
+    //   console.log(data)
     }
   },
   watch: {},

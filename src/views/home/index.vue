@@ -6,6 +6,8 @@
 
     <!-- 频道列表 -->
     <van-tabs v-model="active">
+      <van-icon @click="popupShow = true"
+      name="wap-nav" slot="nav-right"></van-icon>
       <van-tab :title="item.name"
       v-for="item of channels" :key="item.id">
 
@@ -14,6 +16,14 @@
         <!-- /文章列表 -->
       </van-tab>
     </van-tabs>
+    <van-popup
+        v-model="popupShow"
+        position="bottom"
+        closeable
+        round
+        :style="{ height: '94%' }">
+        <channel-edit :myChannels="channels"></channel-edit>
+        </van-popup>
     <!-- /频道列表 -->
   </div>
 </template>
@@ -25,7 +35,8 @@ export default {
   data () {
     return {
       active: 0,
-      channels: []
+      channels: [],
+      popupShow: true
     }
   },
   methods: {
@@ -66,5 +77,18 @@ export default {
     right: 0;
     z-index: 1;
   }
+  /deep/ .van-icon{
+    position: fixed;
+    right: 0;
+    line-height: 44px;
+    background-color: #fff;
+  }
+ .van-popup{
+  /deep/ .van-popup__close-icon--top-right{
+    left: 20px;
+    top: 60px;
+    z-index: -1;
+  }
+ }
 }
 </style>

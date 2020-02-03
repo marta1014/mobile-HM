@@ -6,40 +6,53 @@
     finished-text="没有更多了"
     @load="onLoad">
       <van-cell
-      v-for="item in list"
-      :key="item"
-      :title="item" />
+      v-for="(item,index) in resSearch"
+      :key="index"
+      :title="item.title" />
     </van-list>
   </div>
 </template>
 
 <script>
+import { getSearchRes } from '@/api/search'
 export default {
   name: 'resList',
+  props: {
+    words: {
+      type: String,
+      required: true
+    }
+  },
   data () {
     return {
       list: [],
       loading: false,
-      finished: false
+      finished: false,
+      page: 1,
+      perPage: 20,
+      resSearch: []
     }
   },
   methods: {
-    onLoad () {
-      // 异步更新数据
-      // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-      setTimeout(() => {
-        for (let i = 0; i < 10; i++) {
-          this.list.push(this.list.length + 1)
-        }
+    async onLoad () {
+      const { data } = await getSearchRes({
+        page: this.page,
+        per_page: this.perPage,
+        q: this.words
+      })
+      // console.log(data)
 
-        // 加载状态结束
-        this.loading = false
+      const { results } = data.data
+      this.resSearch.push(...results)
+      // // 加载状态结束
+      this.loading = false
 
-        // 数据全部加载完成
-        if (this.list.length >= 40) {
-          this.finished = true
-        }
-      }, 1000)
+      // // 数据全部加载完成
+      if (results.length) {
+        this.page++ // 继续获取更新获取下一页数据的页码
+      } else {
+        this.finished = true // 没有数据了，将加载状态设置结束，不再 onLoad
+      }
     }
   }
 }

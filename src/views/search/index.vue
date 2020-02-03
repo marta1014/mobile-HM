@@ -16,7 +16,7 @@
 
      <!-- 搜索结果 -->
     <search-list
-    v-if="resShow"></search-list>
+    v-if="resShow" :words="searchText"></search-list>
     <!-- /搜索结果 -->
 
     <!-- 联想建议 -->

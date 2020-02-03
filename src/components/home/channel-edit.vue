@@ -1,16 +1,20 @@
 <template>
   <div class="channel-edit">
-     <van-cell class="channel-title" title="单元格" :border="false">
+     <van-cell class="channel-title" title="我的频道" :border="false">
         <van-button size="mini" round type="danger" plain>编辑</van-button>
      </van-cell>
      <van-grid>
       <van-grid-item :text="item.name" v-for="item of myChannels" :key="item.id"/>
     </van-grid>
 
-     <van-cell  title="单元格" :border="false">
+     <van-cell  title="推荐频道" :border="false">
      </van-cell>
      <van-grid>
-      <van-grid-item :text="item.name" v-for="item of remainingChannels" :key="item.id"/>
+      <van-grid-item
+      @click="onAdd(item)"
+      :text="item.name"
+      v-for="item of remainingChannels"
+      :key="item.id"/>
     </van-grid>
   </div>
 </template>
@@ -35,6 +39,10 @@ export default {
       const { data } = await getAllChannels()
       // console.log(data.data.channels)
       this.allChannels = data.data.channels
+    },
+    onAdd (item) {
+      this.myChannels.push(item)
+      console.log(this.myChannels)
     }
   },
   created () {

@@ -20,9 +20,8 @@
     closeable
     v-model="isEditShow"
     position="bottom"
-    close-icon-position="top-left"
-    :style="{ height: '100%' }">
-    <channel-edit class="channel-edit"/>
+    :style="{ height: '90%' }">
+    <channel-edit :userChannels="channels" class="channel-edit"/>
     </van-popup>
     <!-- /频道列表 -->
   </div>
@@ -83,8 +82,16 @@ export default {
     right: 0;
     z-index: 1;
   }
+  .van-popup {
+    overflow: hidden;
+  }
   .channel-edit{
     padding: 70px 0;
+  }
+  /deep/ .van-icon-cross{
+    position: fixed;
+    left: 20px;
+    top: 10%;
   }
 }
 </style>

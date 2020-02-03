@@ -21,8 +21,9 @@
     v-model="isEditShow"
     position="bottom"
     close-icon-position="top-left"
-    :style="{ height: '100%' }"
-    ></van-popup>
+    :style="{ height: '100%' }">
+    <channel-edit class="channel-edit"/>
+    </van-popup>
     <!-- /频道列表 -->
   </div>
 </template>
@@ -81,6 +82,9 @@ export default {
     left: 0;
     right: 0;
     z-index: 1;
+  }
+  .channel-edit{
+    padding: 70px 0;
   }
 }
 </style>

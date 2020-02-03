@@ -10,7 +10,9 @@
       @click="myChannelClick(index)"
       v-for="(item,index) of myChannels"
       :key="item.id">
-      <van-icon class="delIcon" slot="icon" v-show="delIcon" name="close"></van-icon>
+      <van-icon class="delIcon" slot="icon"
+      v-show="delIcon && index !== 0" name="close"></van-icon>
+      <!-- 绑定class类名 条件 => true作用 false则不作用 -->
       <span slot="text" class="text" :class="{active:value === index}">{{item.name}}</span>
       </van-grid-item>
     </van-grid>
@@ -59,7 +61,7 @@ export default {
     },
     myChannelClick (index) {
       // 编辑状态 删除
-      if (this.delIcon && index !== 0) {
+      if (this.delIcon && index !== 0) { // 禁删推荐处理
         this.myChannels.splice(index, 1)
       } else {
         this.$emit('input', index)

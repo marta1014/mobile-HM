@@ -35,13 +35,16 @@
     <van-cell-group v-else>
       <van-cell title="历史记录">
         <template v-if="delControl">
-          <span>全部删除</span>&nbsp;<span @click="delControl = false">完成</span>
+          <span @click="historysSearch = []">全部删除</span>&nbsp;
+          <span @click="delControl = false">完成</span>
         </template>
           <van-icon v-else name="delete" @click="delControl = true"></van-icon>
       </van-cell>
       <van-cell :title="item" @click="onSearch(item)"
       v-for="(item,index) of historysSearch" :key="index">
-          <van-icon name="close" v-show="delControl"></van-icon>
+          <van-icon name="close"
+          @click.stop="historysSearch.splice(index,1)"
+          v-show="delControl"></van-icon>
       </van-cell>
     </van-cell-group>
     <!-- /历史记录 -->

@@ -117,6 +117,11 @@ export default {
       this.loading = false
     },
     async onCollect () {
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        message: '努力操作中...',
+        forbidClick: true // 是否禁止背景点击
+      })
       try {
         if (this.arDetails.is_collected) {
           await delCollect(this.id)

@@ -6,6 +6,7 @@
           finished-text="没有更多了"
           @load="onLoad">
             <van-cell v-for="item in list"
+            @click="$router.push(`/article/${item.art_id}`)"
             :key="item.id" :title="item.title" />
           </van-list>
         </van-pull-refresh>

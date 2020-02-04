@@ -6,6 +6,7 @@
     finished-text="没有更多了"
     @load="onLoad">
       <van-cell
+      @click="$router.push(`/article/${item.art_id}`)"
       v-for="(item,index) in resSearch"
       :key="index"
       :title="item.title" />

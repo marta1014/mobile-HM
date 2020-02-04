@@ -54,6 +54,7 @@
 <script>
 import { getSuggest } from '@/api/search'
 import { getItem, setItem } from '@/utils/storage'
+import { debounce } from 'lodash'
 export default {
   name: 'searchPage',
   data () {
@@ -81,14 +82,15 @@ export default {
       this.historysSearch.unshift(this.searchText)
       this.resShow = true
     },
-    async searchInput () {
+    //
+    searchInput: debounce(async function () {
       if (!this.searchText) { // 非空判断 避免空数据请求
         return
       }
       const { data } = await getSuggest(this.searchText)
       this.suggest = data.data.options
     //   console.log(data)
-    },
+    }, 400),
     highlight (source, keyword) {
       const reg = new RegExp(keyword, 'gi')
       const str = `<span style="color:#f00">${keyword}</span>`

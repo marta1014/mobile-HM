@@ -6,7 +6,7 @@
         v-model="searchText"
         show-action
         placeholder="请输入搜索关键词"
-        @search="onSearch"
+        @search="onSearch(searchText)"
         @input="searchInput"
         @focus="resShow = false"
         @cancel="$router.back()"
@@ -24,7 +24,7 @@
     <van-cell
     v-for="(item,index) of suggest"
     :key="index"
-    @click="clickSuggest(item)"
+    @click="onSearch(item)"
     icon="search">
     <div slot="title" v-html="highlight(item,searchText)"></div>
     </van-cell>
@@ -37,7 +37,8 @@
           <van-icon name="delete"></van-icon>
           <span>全部删除</span>&nbsp;<span>完成</span>
       </van-cell>
-      <van-cell :title="item" v-for="(item,index) of historysSearch" :key="index">
+      <van-cell :title="item" @click="onSearch(item)"
+      v-for="(item,index) of historysSearch" :key="index">
           <van-icon name="close"></van-icon>
       </van-cell>
     </van-cell-group>
@@ -59,12 +60,18 @@ export default {
     }
   },
   methods: {
-    onSearch () {
-      // 记录搜索记录
+    onSearch (q) {
+      // 1.修改搜索框的内容 （键入数据/联想建议/历史记录文本）
+      // 回车搜索是文本框本身 本身对本身赋值无变化
+      // 点击某个联想建议 文本框变为该建议点击项
+      // 点击记录 文本框变为记录文本项
+      this.searchText = q
+      // 2.记录搜索记录
       const index = this.historysSearch.indexOf(this.searchText)
       if (index !== -1) {
         this.historysSearch.splice(index, 1)
       }
+      // 3.展示搜索结果
       this.historysSearch.unshift(this.searchText)
       this.resShow = true
     },
@@ -80,12 +87,6 @@ export default {
       const reg = new RegExp(keyword, 'gi')
       const str = `<span style="color:#f00">${keyword}</span>`
       return source.replace(reg, str)
-    },
-    clickSuggest (item) {
-      // 搜索框文本更新
-      this.searchText = item
-      // 展示搜索结果
-      this.resShow = true
     }
   },
   watch: {

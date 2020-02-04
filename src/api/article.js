@@ -46,3 +46,22 @@ export const delLike = articleId => request({
   method: 'DELETE',
   url: `/app/v1_0/article/likings/${articleId}`
 })
+
+/**
+ * 添加关注
+ */
+export const addFollow = userId => request({
+  method: 'POST',
+  url: '/app/v1_0/user/followings',
+  data: {
+    target: userId
+  }
+})
+
+/**
+ * 取消关注
+ */
+export const delFollow = userId => request({
+  method: 'DELETE',
+  url: `/app/v1_0/user/followings/${userId}`
+})

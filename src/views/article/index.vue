@@ -39,6 +39,7 @@
         <!-- 用户没登陆或当前文章非本人所写按钮显示 -->
         <!-- v-if="!$store.state.user || arDetails.aut_id  !== 当前登陆用户id" -->
         <van-button class="follow-btn" size="small" round
+        @click="onfollow" :loading="followLoading"
         v-if="!$store.state.user || arDetails.aut_id  !== $store.state.user.userId"
         :type="arDetails.is_followed ? 'default' :'info'" >
           {{arDetails.is_followed? '已关注' : "+ 关注"}}</van-button>
@@ -91,7 +92,8 @@
 
 <script>
 import { getDetails, addCollect,
-  delCollect, addLike, delLike } from '@/api/article'
+  delCollect, addLike, delLike,
+  addFollow, delFollow } from '@/api/article'
 export default {
   name: 'articlePage',
   props: {
@@ -103,7 +105,8 @@ export default {
   data () {
     return {
       arDetails: {},
-      loading: true
+      loading: true,
+      followLoading: false
     }
   },
   computed: {},
@@ -164,6 +167,22 @@ export default {
         console.log(error)
         this.$toast.fail('操作失败')
       }
+    },
+    async onfollow () {
+      this.followLoading = true
+      try {
+        if (this.arDetails.is_followed) {
+          await delFollow(this.arDetails.aut_id)
+        } else {
+          await addFollow(this.arDetails.aut_id)
+        }
+        // 更新视图
+        this.arDetails.is_followed = !this.arDetails.is_followed
+      } catch (error) {
+        console.log(error)
+        this.$toast.fail('操作失败')
+      }
+      this.followLoading = false
     }
   }
 }

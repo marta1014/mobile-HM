@@ -69,8 +69,9 @@
         info="9"
       />
       <van-icon
+      @click="onCollect()"
         color="orange"
-        name="star"
+        :name="arDetails.is_collected? 'star' : 'star-o'"
       />
       <van-icon
         color="#e5645f"
@@ -83,7 +84,7 @@
 </template>
 
 <script>
-import { getDetails } from '@/api/article'
+import { getDetails, addCollect, delCollect } from '@/api/article'
 export default {
   name: 'articlePage',
   props: {
@@ -114,6 +115,22 @@ export default {
       } catch (error) {
       }
       this.loading = false
+    },
+    async onCollect () {
+      try {
+        if (this.arDetails.is_collected) {
+          await delCollect(this.id)
+          this.arDetails.is_collected = false
+          this.$toast.success('取消收藏')
+        } else {
+          await addCollect(this.id)
+          this.arDetails.is_collected = true
+          this.$toast.success('收藏成功')
+        }
+      } catch (error) {
+        console.log(error)
+        this.$toast.fail('操作失败')
+      }
     }
   }
 }

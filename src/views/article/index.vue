@@ -36,7 +36,9 @@
             <p class="time">{{arDetails.pubdate}}</p>
           </div>
         </div>
-        <van-button class="follow-btn" type="info" size="small" round>+ 关注</van-button>
+        <van-button class="follow-btn" size="small" round
+        :type="arDetails.is_followed ? 'default' :'info'" >
+          {{arDetails.is_followed? '已关注' : "+ 关注"}}</van-button>
       </div>
       <div class="markdown-body" v-html="arDetails.content"></div>
     </div>

@@ -36,7 +36,10 @@
             <p class="time">{{arDetails.pubdate}}</p>
           </div>
         </div>
+        <!-- 用户没登陆或当前文章非本人所写按钮显示 -->
+        <!-- v-if="!$store.state.user || arDetails.aut_id  !== 当前登陆用户id" -->
         <van-button class="follow-btn" size="small" round
+        v-if="!$store.state.user || arDetails.aut_id  !== $store.state.user.userId"
         :type="arDetails.is_followed ? 'default' :'info'" >
           {{arDetails.is_followed? '已关注' : "+ 关注"}}</van-button>
       </div>
@@ -87,7 +90,8 @@
 </template>
 
 <script>
-import { getDetails, addCollect, delCollect, addLike, delLike } from '@/api/article'
+import { getDetails, addCollect,
+  delCollect, addLike, delLike } from '@/api/article'
 export default {
   name: 'articlePage',
   props: {

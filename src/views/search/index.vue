@@ -34,12 +34,14 @@
     <!-- 历史记录 -->
     <van-cell-group v-else>
       <van-cell title="历史记录">
-          <van-icon name="delete"></van-icon>
-          <span>全部删除</span>&nbsp;<span>完成</span>
+        <template v-if="delControl">
+          <span>全部删除</span>&nbsp;<span @click="delControl = false">完成</span>
+        </template>
+          <van-icon v-else name="delete" @click="delControl = true"></van-icon>
       </van-cell>
       <van-cell :title="item" @click="onSearch(item)"
       v-for="(item,index) of historysSearch" :key="index">
-          <van-icon name="close"></van-icon>
+          <van-icon name="close" v-show="delControl"></van-icon>
       </van-cell>
     </van-cell-group>
     <!-- /历史记录 -->
@@ -56,7 +58,8 @@ export default {
       searchText: '',
       resShow: false,
       suggest: [],
-      historysSearch: getItem('history-search') || []
+      historysSearch: getItem('history-search') || [],
+      delControl: false
     }
   },
   methods: {

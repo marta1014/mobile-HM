@@ -58,7 +58,7 @@ export default {
     },
     onAdd (item) {
       this.myChannels.push(item)
-      console.log(this.myChannels)
+      // console.log(this.myChannels)
     },
     myChannelClick (index) {
       // 编辑状态 删除

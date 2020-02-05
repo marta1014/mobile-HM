@@ -51,8 +51,11 @@
           :finished="articleComment.finished"
           finished-text="没有更多了"
           @load="onLoad">
-      <van-cell v-for="item in articleComment.list"
-      :key="item.id" :title="item.content" />
+      <!-- <van-cell v-for="item in articleComment.list"
+      :key="item.id" :title="item.content" > -->
+      <comment-item v-for="item of articleComment.list"
+      :key="item.id"  :comment="item"></comment-item>
+      <!-- </van-cell> -->
     </van-list>
     </div>
     <!-- /文章详情 -->
@@ -200,17 +203,16 @@ export default {
       }
       this.followLoading = false
     },
-    async onLoad () {
+    async onLoad () { // 获取评论
       const { data } = await getComments({
         type: 'a',
         source: this.id,
         offset: null, // 获取下一页
         limit: null
       })
-      console.log(data)
       const { results } = data.data
       this.articleComment.list.push(...results)
-      console.log(results)
+      // console.log(results)
 
       // 更新评论条数
       this.articleComment.totalCount = data.data.total_count

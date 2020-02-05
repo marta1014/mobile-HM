@@ -45,6 +45,15 @@
           {{arDetails.is_followed? '已关注' : "+ 关注"}}</van-button>
       </div>
       <div class="markdown-body" v-html="arDetails.content"></div>
+      <!-- 文章评论 -->
+       <van-list
+          v-model="articleComment.loading"
+          :finished="articleComment.finished"
+          finished-text="没有更多了"
+          @load="onLoad">
+      <van-cell v-for="item in articleComment.list"
+      :key="item.id" :title="item.content" />
+    </van-list>
     </div>
     <!-- /文章详情 -->
 
@@ -72,7 +81,7 @@
       <van-icon
         class="comment-icon"
         name="comment-o"
-        info="9"
+        :info="articleComment.totalCount"
       />
       <van-icon
       @click="onCollect()"
@@ -93,7 +102,7 @@
 <script>
 import { getDetails, addCollect,
   delCollect, addLike, delLike,
-  addFollow, delFollow } from '@/api/article'
+  addFollow, delFollow, getComments } from '@/api/article'
 export default {
   name: 'articlePage',
   props: {
@@ -106,7 +115,14 @@ export default {
     return {
       arDetails: {},
       loading: true,
-      followLoading: false
+      followLoading: false,
+      articleComment: { // 文章评论相关数据
+        list: [],
+        loading: false,
+        finished: false,
+        offset: null, // 请求下一页数据的页码
+        totalCount: 0 // 总数据条数
+      }
     }
   },
   computed: {},
@@ -183,6 +199,30 @@ export default {
         this.$toast.fail('操作失败')
       }
       this.followLoading = false
+    },
+    async onLoad () {
+      const { data } = await getComments({
+        type: 'a',
+        source: this.id,
+        offset: null, // 获取下一页
+        limit: null
+      })
+      console.log(data)
+      const { results } = data.data
+      this.articleComment.list.push(...results)
+      console.log(results)
+
+      // 更新评论条数
+      this.articleComment.totalCount = data.data.total_count
+      // 加载状态结束
+      this.articleComment.loading = false
+
+      // 数据全部加载完成
+      if (results.length) {
+        this.articleComment.offset = data.data.last_id // 更新页码
+      } else {
+        this.articleComment.finished = true
+      }
     }
   }
 }
@@ -192,7 +232,7 @@ export default {
 @import "./github-markdown.css";
 
 .article-container {
-  padding: 46px 20px 50px;
+  padding: 46px 20px 150px;
   background: #fff;
  .van-icon{ color:#fff}
   .loading {
@@ -268,6 +308,7 @@ export default {
     }
     .comment-icon {
       bottom: -2px;
+      z-index: 2;
     }
     .share-icon {
       bottom: -2px;

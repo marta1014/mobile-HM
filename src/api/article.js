@@ -65,3 +65,11 @@ export const delFollow = userId => request({
   method: 'DELETE',
   url: `/app/v1_0/user/followings/${userId}`
 })
+
+/**
+ * 获取文章评论
+ */
+export const getComments = params => request({
+  url: `/app/v1_0/comments`,
+  params
+})

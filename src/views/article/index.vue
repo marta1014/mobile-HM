@@ -33,7 +33,7 @@
           />
           <div class="text">
             <p class="name">{{arDetails.aut_name}}</p>
-            <p class="time">{{arDetails.pubdate}}</p>
+            <p class="time">{{arDetails.pubdate | dateTime('YYYY-MM-DD')}}</p>
           </div>
         </div>
         <!-- 用户没登陆或当前文章非本人所写按钮显示 -->
@@ -51,11 +51,9 @@
           :finished="articleComment.finished"
           finished-text="没有更多了"
           @load="onLoad">
-      <!-- <van-cell v-for="item in articleComment.list"
-      :key="item.id" :title="item.content" > -->
+      <van-cell class="commentSection">全部评论</van-cell>
       <comment-item v-for="item of articleComment.list"
       :key="item.id"  :comment="item"></comment-item>
-      <!-- </van-cell> -->
     </van-list>
     </div>
     <!-- /文章详情 -->
@@ -279,6 +277,9 @@ export default {
         width: 85px;
       }
     }
+  }
+  .commentSection{
+    margin-top: 100px;
   }
   .error {
     padding-top: 100px;

@@ -78,6 +78,7 @@
         type="default"
         round
         size="small"
+        @click="showPopup = true"
       >写评论</van-button>
       <van-icon
         class="comment-icon"
@@ -97,6 +98,23 @@
       <van-icon class="share-icon" name="share" />
     </div>
     <!-- /底部区域 -->
+    <!-- 评论弹层 -->
+    <van-popup
+    v-model="showPopup"
+    position="bottom">
+   <div class="postMessage">
+      <van-field
+    v-model="postMessage"
+    rows="2"
+    autosize
+    type="textarea"
+    maxlength="50"
+    placeholder="请输入留言"
+    show-word-limit
+    />
+    <van-button type="primary" size="mini">发布</van-button>
+   </div>
+    </van-popup>
   </div>
 </template>
 
@@ -117,6 +135,8 @@ export default {
       arDetails: {},
       loading: true,
       followLoading: false,
+      showPopup: false,
+      postMessage: '',
       articleComment: { // 文章评论相关数据
         list: [],
         loading: false,
@@ -315,6 +335,15 @@ export default {
     }
     .share-icon {
       bottom: -2px;
+    }
+  }
+  .postMessage {
+    display: flex;
+    padding: 10px;
+    align-items:flex-end;
+    .van-field{
+      background-color: #f5f7f9;
+      margin-right: 10px;
     }
   }
 }

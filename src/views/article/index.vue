@@ -53,6 +53,7 @@
           @load="onLoad">
       <van-cell class="commentSection">全部评论</van-cell>
       <comment-item v-for="item of articleComment.list"
+      @click-reply="isReplyShow = true"
       :key="item.id"  :comment="item"></comment-item>
     </van-list>
     </div>
@@ -70,7 +71,14 @@
       >点击重试</van-button>
     </div>
     <!-- /加载失败提示 -->
-
+    <!-- 评论回复 -->
+    <van-popup
+      v-model="isReplyShow"
+      position="bottom"
+      style="height: 65%">
+      评论回复
+    </van-popup>
+  <!-- /评论回复 -->
     <!-- 底部区域 -->
     <div class="footer">
       <van-button
@@ -141,6 +149,7 @@ export default {
       followLoading: false,
       showPopup: false,
       postMessage: '',
+      isReplyShow: false,
       articleComment: { // 文章评论相关数据
         list: [],
         loading: false,

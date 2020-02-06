@@ -26,8 +26,9 @@
         <van-button
           size="mini"
           type="default"
-          @click="$emit('click-reply')"
+          @click="$emit('click-reply',comment)"
         >回复 {{ comment.reply_count }}</van-button>
+        <!-- 触发事件的同时携带 comment对象 -->
       </p>
     </div>
     <div slot="right-icon" class="like-container">

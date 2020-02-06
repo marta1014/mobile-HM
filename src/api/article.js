@@ -73,3 +73,12 @@ export const getComments = params => request({
   url: `/app/v1_0/comments`,
   params
 })
+
+/**
+ * 发表文章评论
+ */
+export const publishCOM = data => request({
+  method: 'post',
+  url: `/app/v1_0/comments`,
+  data
+})

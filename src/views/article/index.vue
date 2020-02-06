@@ -112,7 +112,10 @@
     placeholder="请输入留言"
     show-word-limit
     />
-    <van-button type="primary" size="mini">发布</van-button>
+    <van-button
+    @click="addPublish"
+    :disabled="!postMessage"
+    type="primary" size="mini">发布</van-button>
    </div>
     </van-popup>
   </div>
@@ -121,7 +124,8 @@
 <script>
 import { getDetails, addCollect,
   delCollect, addLike, delLike,
-  addFollow, delFollow, getComments } from '@/api/article'
+  addFollow, delFollow, getComments,
+  publishCOM } from '@/api/article'
 export default {
   name: 'articlePage',
   props: {
@@ -225,23 +229,52 @@ export default {
       const { data } = await getComments({
         type: 'a',
         source: this.id,
-        offset: null, // 获取下一页
+        offset: this.articleComment.offset, // 获取下一页
         limit: null
       })
       const { results } = data.data
       this.articleComment.list.push(...results)
-      // console.log(results)
 
       // 更新评论条数
       this.articleComment.totalCount = data.data.total_count
       // 加载状态结束
       this.articleComment.loading = false
-
       // 数据全部加载完成
       if (results.length) {
         this.articleComment.offset = data.data.last_id // 更新页码
       } else {
         this.articleComment.finished = true
+      }
+    },
+    async addPublish () {
+      if (!postMessage) { // 非空判断
+        return
+      }
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        message: '努力发布中...',
+        forbidClick: true // 是否禁止背景点击
+      })
+      try {
+        const postMessage = this.postMessage
+        const { data } = await publishCOM({
+          target: this.id,
+          content: postMessage
+        })
+        // 数据展示置顶
+        this.articleComment.list.unshift(data.data.new_obj)
+
+        this.articleComment.totalCount++
+
+        this.$toast.success('发布成功')
+
+        this.postMessage = ''
+
+        this.showPopup = false
+      } catch (error) {
+        console.log(error)
+
+        this.$toast.fail('发布失败')
       }
     }
   }

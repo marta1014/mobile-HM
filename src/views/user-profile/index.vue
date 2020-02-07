@@ -26,15 +26,13 @@
     :style="{ height: '20%' }">
     <edit-name :name="user.name"
     @close-edit="showPopupName = false"
-    @confirm="saveName"
     ></edit-name>
     </van-popup>
   </div>
 </template>
 
 <script>
-import { getUserProfile,
-  updateUserProfile } from '@/api/user'
+import { getUserProfile } from '@/api/user'
 export default {
   name: 'user-profile',
   data () {
@@ -45,24 +43,11 @@ export default {
   },
   methods: {
     async getProfile () {
-      this.$toast.loading({
-        duration: 0, // 持续展示 toast
-        message: '更新中...',
-        forbidClick: true // 是否禁止背景点击
-      })
       try {
         const { data } = await getUserProfile()
         this.user = data.data
-        this.$toast.success('更新成功')
       } catch (error) {
         console.log((error))
-      }
-    },
-    async saveName (name) {
-      try {
-        await updateUserProfile({ name })
-      } catch (error) {
-        console.log(error)
       }
     }
   },

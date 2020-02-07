@@ -28,3 +28,6 @@ export const getUserinfo = () => request({ url: `/app/v1_0/user` })
 
 // 获取频道列表 用户/推荐
 export const getChannels = () => request({ url: `/app/v1_0/user/channels` })
+
+// 获取用户个人资料
+export const getUserProfile = () => request({ url: `/app/v1_0/user/profile` })

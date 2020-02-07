@@ -31,7 +31,8 @@
         <!-- 触发事件的同时携带 comment对象 -->
       </p>
     </div>
-    <div slot="right-icon" class="like-container">
+    <div slot="right-icon" class="like-container" @click="onLike">
+      <!-- 一种是在组件内写点赞 一种是传出去事件$emit('click-good') 由使用该组件的来决定操作 -->
       <van-icon
         :color="comment.is_liking ? '#e5645f' : ''"
         :name="comment.is_liking ? 'good-job' : 'good-job-o'"
@@ -42,6 +43,7 @@
 </template>
 
 <script>
+import { addCommentLick, delCommentLick } from '@/api/article'
 export default {
   name: 'CommentItem',
   components: {},
@@ -58,7 +60,31 @@ export default {
   watch: {
   },
   created () {},
-  methods: {}
+  methods: {
+    async onLike () {
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        message: '努力操作中...',
+        forbidClick: true // 是否禁止背景点击
+      })
+      try {
+        if (this.comment.is_liking) {
+          await delCommentLick(this.comment.com_id.toString())
+          this.comment.like_count--
+          this.$toast.success('取消成功')
+        } else {
+          await addCommentLick(this.comment.com_id.toString())
+          this.comment.like_count++
+          this.$toast.success('点赞成功')
+        }
+        // 更新视图
+        this.comment.is_liking = !this.comment.is_liking
+      } catch (error) {
+        console.log(error)
+        this.$toast('操作失败')
+      }
+    }
+  }
 }
 </script>
 

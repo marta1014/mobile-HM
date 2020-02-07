@@ -82,3 +82,22 @@ export const publishCOM = data => request({
   url: `/app/v1_0/comments`,
   data
 })
+
+/**
+ * 评论点赞
+ */
+export const addCommentLick = commentId => request({
+  method: 'POST',
+  url: '/app/v1_0/comment/likings',
+  data: {
+    target: commentId
+  }
+})
+
+/**
+ * 评论取消点赞
+ */
+export const delCommentLick = commentId => request({
+  method: 'DELETE',
+  url: `/app/v1_0/comment/likings/${commentId}`
+})

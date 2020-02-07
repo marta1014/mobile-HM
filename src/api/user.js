@@ -31,3 +31,10 @@ export const getChannels = () => request({ url: `/app/v1_0/user/channels` })
 
 // 获取用户个人资料
 export const getUserProfile = () => request({ url: `/app/v1_0/user/profile` })
+
+// 更新用户资料
+export const updateUserProfile = data => request({
+  method: 'PATCH',
+  url: '/app/v1_0/user/profile',
+  data
+})

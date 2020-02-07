@@ -12,30 +12,57 @@
           :src="user.photo"
         />
       </van-cell>
-      <van-cell title="昵称" :value="user.name" is-link />
+      <van-cell title="昵称"
+      @click="showPopupName = true"
+      :value="user.name" is-link />
       <van-cell title="性别" :value="user.gender === '0' ? '男': '女'" is-link />
       <van-cell title="生日" :value="user.birthday " is-link />
     </van-cell-group>
+
+    <!-- 名称弹层 -->
+    <van-popup
+    v-model="showPopupName"
+    position="bottom "
+    :style="{ height: '20%' }">
+    <edit-name :name="user.name"
+    @close-edit="showPopupName = false"
+    @confirm="saveName"
+    ></edit-name>
+    </van-popup>
   </div>
 </template>
 
 <script>
-import { getUserProfile } from '@/api/user'
+import { getUserProfile,
+  updateUserProfile } from '@/api/user'
 export default {
   name: 'user-profile',
   data () {
     return {
-      user: {}
+      user: {},
+      showPopupName: false
     }
   },
   methods: {
     async getProfile () {
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        message: '更新中...',
+        forbidClick: true // 是否禁止背景点击
+      })
       try {
         const { data } = await getUserProfile()
         this.user = data.data
-        console.log(this.user)
+        this.$toast.success('更新成功')
       } catch (error) {
         console.log((error))
+      }
+    },
+    async saveName (name) {
+      try {
+        await updateUserProfile({ name })
+      } catch (error) {
+        console.log(error)
       }
     }
   },
@@ -53,7 +80,7 @@ export default {
             color: #fff;
         }
         .van-nav-bar__text{
-            color: #fff;
+            color: rgb(14, 207, 233);
         }
     }
 }

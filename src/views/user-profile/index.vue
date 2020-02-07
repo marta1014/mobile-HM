@@ -22,8 +22,9 @@
     </van-cell-group>
 
     <!-- 图片预览 -->
-
-    <van-image-preview v-model="previewShow" :images="images">
+    <!-- 设置关闭置空 来处理两次预览同图不触发预览 -->
+    <van-image-preview v-model="previewShow" @close="$refs.file.value = ''"
+    :images="images">
       <van-nav-bar
       slot="cover"
       left-text="取消"
@@ -46,7 +47,7 @@
 </template>
 
 <script>
-import { getUserProfile } from '@/api/user'
+import { getUserProfile, updateUserPhoto } from '@/api/user'
 export default {
   name: 'user-profile',
   data () {
@@ -89,7 +90,27 @@ export default {
       this.images = [fileData]
       this.previewShow = true
     },
-    onUpdate () {}
+    async onUpdate () {
+      // 1.构建包含（文件数据）的表单对象 务必放入FormData
+      const fd = new FormData()
+      fd.append('photo', this.file.files[0])
+      // 2.请求提交
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        message: '更新中...',
+        forbidClick: true // 是否禁止背景点击
+      })
+      try {
+        const { data } = await updateUserPhoto(fd)
+        this.$toast.success('更新成功')
+        this.previewShow = false
+        this.user.photo = data.data.photo
+      } catch (error) {
+        console.log(error)
+        this.$toast.fail('更新失败')
+      }
+      // 3.根据相应结果后续处理
+    }
   },
   created () {
     this.getProfile()

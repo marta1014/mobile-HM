@@ -24,6 +24,33 @@
     <comment-item v-for="(item,index) of list" :key="index"
     :comment="item"></comment-item>
     </van-list>
+
+    <!-- 底部区域 -->
+    <div class="footer">
+      <van-button
+        class="write-btn"
+        type="default"
+        round
+        size="small"
+        @click="showPopup = true"
+      >写评论</van-button>
+      <van-icon
+        color="#e5645f"
+        name="good-job"
+      />
+    </div>
+    <!-- /底部区域 -->
+
+    <!-- 发布回复 -->
+
+     <van-popup
+    v-model="showPopup"
+    position="bottom">
+    <post-answer
+    @click-post="onPost"
+    v-model="postMessage"></post-answer>
+    <!-- 在组件中使用v-model语法 value input -->
+    </van-popup>
   </div>
 </template>
 
@@ -42,7 +69,9 @@ export default {
       list: [],
       loading: false,
       finished: false,
-      offset: null
+      offset: null,
+      showPopup: false,
+      postMessage: ''
     }
   },
   methods: {
@@ -66,7 +95,8 @@ export default {
       } else {
         this.finished = true
       }
-    }
+    },
+    onPost () {}
   }
 }
 </script>
@@ -76,6 +106,19 @@ export default {
    /deep/ .van-icon{
         color: #fff;
     }
+    .footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 44px;
+    border-top: 1px solid #d8d8d8;
+    background-color: #fff;
+  }
 }
 
 </style>

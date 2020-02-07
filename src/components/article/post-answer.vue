@@ -7,7 +7,6 @@
       模版中的$event表示事件参数
       -->
       <van-field
-        v-model="message"
         rows="2"
         autosize
         type="textarea"

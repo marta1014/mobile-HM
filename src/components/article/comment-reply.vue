@@ -55,12 +55,16 @@
 </template>
 
 <script>
-import { getComments } from '@/api/article'
+import { getComments, publishCOM } from '@/api/article'
 export default {
   name: 'comment-reply',
   props: {
     comment1: {
       type: Object,
+      required: true
+    },
+    artId: {
+      type: [Object, String, Number],
       required: true
     }
   },
@@ -96,7 +100,38 @@ export default {
         this.finished = true
       }
     },
-    onPost () {}
+    async onPost () {
+      if (!postMessage) { // 非空判断
+        return
+      }
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        message: '努力发布中...',
+        forbidClick: true // 是否禁止背景点击
+      })
+      try {
+        const postMessage = this.postMessage
+        const { data } = await publishCOM({
+          target: this.comment1.com_id.toString(),
+          content: postMessage,
+          art_id: this.artId.toString()
+        })
+        // 数据展示置顶
+        this.list.unshift(data.data.new_obj)
+
+        this.comment1.reply_count++
+
+        this.$toast.success('发布成功')
+
+        this.postMessage = ''
+
+        this.showPopup = false
+      } catch (error) {
+        console.log(error)
+
+        this.$toast.fail('发布失败')
+      }
+    }
   }
 }
 </script>

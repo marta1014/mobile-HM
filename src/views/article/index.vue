@@ -81,7 +81,8 @@
       <comment-reply
       v-if="isReplyShow"
       :comment1="currentComment"
-      @click-close="isReplyShow = false"></comment-reply>
+      @click-close="isReplyShow = false"
+      :artId="id"></comment-reply>
       <!-- 因弹层的原因 懒加载 导致点击不同回复时出现无法正常切换 -->
       <!-- 绑定v-if 实现弹层关闭时销毁当前点击的回复-->
     </van-popup>

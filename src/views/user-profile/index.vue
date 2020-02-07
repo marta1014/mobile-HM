@@ -34,20 +34,37 @@
       />
     </van-image-preview>
 
-    <!-- 名称弹层 -->
+    <!-- 用户昵称修改 -->
     <van-popup
     v-model="showPopupName"
     position="bottom "
     :style="{ height: '20%' }">
-    <edit-name :name="user.name"
-    @close-edit="showPopupName = false"
-    ></edit-name>
+    <van-nav-bar
+      title="编辑名称"
+      left-text="取消"
+      right-text="确定"
+      @click-left="showPopupName = false"
+      @click-right="onUpdateName"
+      ></van-nav-bar>
+       <van-field
+       :value="user.name"
+       rows="2"
+       autosize
+       type="textarea"
+       maxlength="20"
+       placeholder="请输入名称"
+       show-word-limit
+       @input="inputmMessage = $event"
+     />
+     <!-- $event 是 filed组件触发input事件所传出来的input的数据
+     然后保存在了data中的inputmMessage中 -->
     </van-popup>
   </div>
 </template>
 
 <script>
-import { getUserProfile, updateUserPhoto } from '@/api/user'
+import { getUserProfile, updateUserPhoto,
+  updateUserProfile } from '@/api/user'
 export default {
   name: 'user-profile',
   data () {
@@ -55,7 +72,8 @@ export default {
       user: {},
       showPopupName: false,
       previewShow: false,
-      images: []
+      images: [],
+      inputmMessage: ''
     }
   },
   computed: {
@@ -110,6 +128,30 @@ export default {
         this.$toast.fail('更新失败')
       }
       // 3.根据相应结果后续处理
+    },
+    async updateUserProfile (field, value) {
+      // field要修改的数据字段  value数据值
+      this.$toast.loading({
+        duration: 0, // 持续展示 toast
+        message: '更新中...',
+        forbidClick: true // 是否禁止背景点击
+      })
+      try {
+        await updateUserProfile({
+        // 使用中括号 否则会认为字符串而非变量
+          [field]: value
+        })
+        this.$toast.success('更新成功')
+      } catch (err) {
+        this.$toast.fail('更新失败')
+      }
+    },
+    async onUpdateName () {
+      // 1.请求更新
+      await this.updateUserProfile('name', this.inputmMessage)
+      // 2.后续处理 更新世图/关闭弹层
+      this.user.name = this.inputmMessage
+      this.showPopupName = false
     }
   },
   created () {
@@ -137,6 +179,14 @@ export default {
     .van-nav-bar {
       background-color: #000;
     }
+}
+.van-popup{
+ /deep/  .van-nav-bar{
+   background-color: #fff;
+   .van-nav-bar__title{
+     color: #323233;
+   }
+  }
 }
 }
 

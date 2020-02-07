@@ -3,7 +3,7 @@
        <van-nav-bar title="个人信息" left-arrow right-text="保存" />
 
        <van-cell-group>
-      <van-cell title="头像" is-link>
+      <van-cell title="头像" is-link @click="onFileSelect">
         <van-image
           round
           width="30"
@@ -12,6 +12,8 @@
           :src="user.photo"
         />
       </van-cell>
+      <!-- file类型的input -->
+      <input type="file" hidden ref="file">
       <van-cell title="昵称"
       @click="showPopupName = true"
       :value="user.name" is-link />
@@ -49,6 +51,10 @@ export default {
       } catch (error) {
         console.log((error))
       }
+    },
+    onFileSelect () {
+      // 手动触发input的点击事件
+      this.$refs['file'].click()
     }
   },
   created () {

@@ -52,21 +52,22 @@ const routes = [
     name: 'userProfile',
     component: () => import('@/views/user-profile')
   },
-  {
-    path: '/my-article', // 我的作品
+  {// 问号的意思是第二段路径可有可无
+    path: '/my-article/:type?', // 我的作品
     name: 'userArticles',
-    component: () => import('@/views/user-articles')
-  },
-  {
-    path: '/my-article/collect', // 我的收藏
-    name: 'userCollect',
-    component: () => import('@/views/user-articles')
-  },
-  {
-    path: '/my-article/history', // 我的历史
-    name: 'userHistory',
-    component: () => import('@/views/user-articles')
+    component: () => import('@/views/user-articles'),
+    props: true
   }
+  // {
+  //   path: '/my-article/collect', // 我的收藏
+  //   name: 'userCollect',
+  //   component: () => import('@/views/user-articles')
+  // },
+  // {
+  //   path: '/my-article/history', // 我的历史
+  //   name: 'userHistory',
+  //   component: () => import('@/views/user-articles')
+  // }
 ]
 
 const router = new VueRouter({

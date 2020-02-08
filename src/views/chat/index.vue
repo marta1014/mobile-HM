@@ -35,7 +35,9 @@
     <!-- 发送消息 -->
     <van-cell-group class="send-message">
       <van-field v-model="message" center clearable>
-        <van-button slot="button" size="small" type="primary">发送</van-button>
+        <van-button slot="button" size="small"
+        @click="onSend"
+        type="primary">发送</van-button>
       </van-field>
     </van-cell-group>
     <!-- /发送消息 -->
@@ -48,16 +50,37 @@ export default {
   name: 'UserChat',
   data () {
     return {
-      message: ''
+      message: '',
+      socket: ''
     }
   },
   created () {
     // 安装/导入/传入地址建立socket连接
     const socket = io('http://ttapi.research.itcast.cn')
 
+    this.socket = socket// 存储
+
     socket.on('connect', function () { // 连接成功回调
       console.log('建立连接成功')
     })
+
+    // 发送消息 socket.emit('type', content)
+    // window.socket = socket暴露全局进行log测试
+
+    // 接收消息 socket.on('type', data => console.log(data))
+    socket.on('message', msg => console.log('message =>', msg))
+  },
+  methods: {
+    onSend () {
+      const message = this.message
+      if (!message.length) {
+        return
+      }
+      // **消息类型 数据格式 接口都有要求**
+      this.socket.emit('message', { msg: message, timestamp: Date.now() })
+
+      this.message = '' // 置空文本框
+    }
   }
 }
 </script>

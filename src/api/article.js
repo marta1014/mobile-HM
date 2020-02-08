@@ -101,3 +101,12 @@ export const delCommentLick = commentId => request({
   method: 'DELETE',
   url: `/app/v1_0/comment/likings/${commentId}`
 })
+
+// 获取当前用户文章列表（我的作品）
+export const getUserWorks = params => request({ url: `/app/v1_0/user/articles`, params })
+
+// 获取当前用户收藏列表
+export const getUsercollect = params => request({ url: `/app/v1_0/article/collections`, params })
+
+// 获取当前用户历史记录
+export const getUserHistory = params => request({ url: `/app/v1_0/user/histories`, params })

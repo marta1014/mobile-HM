@@ -20,7 +20,9 @@
       <van-cell title="性别"
       @click="showGender = true"
       :value="user.gender === '0' ? '男': '女'" is-link />
-      <van-cell title="生日" :value="user.birthday " is-link />
+      <van-cell title="生日"
+      @click="showBirthday = true"
+      :value="user.birthday " is-link />
     </van-cell-group>
 
     <!-- 图片预览 -->
@@ -48,15 +50,15 @@
       @click-left="showPopupName = false"
       @click-right="onUpdateName"
       ></van-nav-bar>
-       <van-field
-       :value="user.name"
-       rows="2"
-       autosize
-       type="textarea"
-       maxlength="20"
-       placeholder="请输入名称"
-       show-word-limit
-       @input="inputmMessage = $event"
+      <van-field
+        :value="user.name"
+        rows="2"
+        autosize
+        type="textarea"
+        maxlength="20"
+        placeholder="请输入名称"
+        show-word-limit
+        @input="inputmMessage = $event"
      />
      <!-- $event 是 filed组件触发input事件所传出来的input的数据
      然后保存在了data中的inputmMessage中 -->
@@ -70,12 +72,27 @@
       @cancel="showGender = false"
       @select="gendrSelect"
     />
+
+    <!-- 生日修改 -->
+    <van-popup
+    v-model="showBirthday "
+    position="bottom ">
+      <van-datetime-picker
+        :value="selectDate"
+        type="date"
+        :min-date="minDate"
+        :max-date="maxDate"
+        @cancel="showBirthday = false"
+        @confirm="onUpdateBirthday"
+      />
+    </van-popup>
   </div>
 </template>
 
 <script>
 import { getUserProfile, updateUserPhoto,
   updateUserProfile } from '@/api/user'
+import moment from 'moment'
 export default {
   name: 'user-profile',
   data () {
@@ -86,16 +103,26 @@ export default {
       images: [],
       inputmMessage: '',
       showGender: false,
+      showBirthday: false,
       actions: [
         // 自己添加value 省去请求判断
         { name: '男', value: 0 },
         { name: '女', value: 1 }
-      ]
+      ],
+      minDate: new Date(1970, 0, 1),
+      maxDate: new Date()
+      // currentDate: new Date()
     }
   },
   computed: {
+    // 为了访问方便 每次都要$this.$refs['files]访问
+    // 所以通过计算属性封装简化对其的访问
     file () { // 访问file === 访问this.$refs['file]
       return this.$refs['file']
+    },
+    selectDate () {
+      // 把字符串格式的日期 转换为js日期对象 设置给vant的日期选择器
+      return new Date(this.user.birthday)
     }
   },
   methods: {
@@ -175,6 +202,13 @@ export default {
       this.updateUserProfile('gender', data.value)
       this.user.gender = data.value
       this.showGender = false
+    },
+    async onUpdateBirthday (value) {
+      // 格式化处理value
+      const date = moment(value).format('YYYY-MM-DD')
+      await this.updateUserProfile('birthday', date)
+      this.user.birthday = date
+      this.showBirthday = false
     }
   },
   created () {

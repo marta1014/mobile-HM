@@ -46,13 +46,14 @@
 
 <script>
 import io from 'socket.io-client'
+import { getItem, setItem } from '@/utils/storage'
 export default {
   name: 'UserChat',
   data () {
     return {
       message: '',
       socket: '',
-      msgList: []
+      msgList: getItem('chat-msg') || []
     }
   },
   created () {
@@ -87,6 +88,13 @@ export default {
       this.msgList.push(data)
 
       this.message = '' // 置空文本框
+    }
+  },
+  watch: {
+    // 参数1 最新值 参数2 变化之前的旧值
+    msgList (value) {
+      // 消息放生变化存至本地
+      setItem('chat-msg', value)
     }
   }
 }

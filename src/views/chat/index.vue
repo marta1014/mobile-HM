@@ -88,6 +88,10 @@ export default {
       this.msgList.push(data)
 
       this.message = '' // 置空文本框
+    },
+    toBottom () {
+      const container = this.$refs['message-list']
+      container.scrollTop = container.scrollHeight
     }
   },
   watch: {
@@ -95,6 +99,19 @@ export default {
     msgList (value) {
       // 消息放生变化存至本地
       setItem('chat-msg', value)
+
+      this.$nextTick(() => {
+        this.toBottom()
+      })
+      //   this.toBottom()// 实现滚动到底部
+
+    /**
+     * $nextTick()的作用
+     * 数据影响视图不是即时的
+     * 当在修改完数据后马上操作该dom 此时未更新
+     * 特殊api 接收函数作为参数 自动执行
+     * 该函数中的代码会确保本次数据更新视图之后才执行
+     */
     }
   }
 }

@@ -17,7 +17,9 @@
       <van-cell title="昵称"
       @click="showPopupName = true"
       :value="user.name" is-link />
-      <van-cell title="性别" :value="user.gender === '0' ? '男': '女'" is-link />
+      <van-cell title="性别"
+      @click="showGender = true"
+      :value="user.gender === '0' ? '男': '女'" is-link />
       <van-cell title="生日" :value="user.birthday " is-link />
     </van-cell-group>
 
@@ -59,6 +61,15 @@
      <!-- $event 是 filed组件触发input事件所传出来的input的数据
      然后保存在了data中的inputmMessage中 -->
     </van-popup>
+
+    <!-- 性别修改 -->
+    <van-action-sheet
+      v-model="showGender"
+      :actions="actions"
+      cancel-text="取消"
+      @cancel="showGender = false"
+      @select="gendrSelect"
+    />
   </div>
 </template>
 
@@ -73,7 +84,13 @@ export default {
       showPopupName: false,
       previewShow: false,
       images: [],
-      inputmMessage: ''
+      inputmMessage: '',
+      showGender: false,
+      actions: [
+        // 自己添加value 省去请求判断
+        { name: '男', value: 0 },
+        { name: '女', value: 1 }
+      ]
     }
   },
   computed: {
@@ -152,6 +169,12 @@ export default {
       // 2.后续处理 更新世图/关闭弹层
       this.user.name = this.inputmMessage
       this.showPopupName = false
+    },
+    async  gendrSelect (data) {
+      // 接口原因 显示不正确
+      this.updateUserProfile('gender', data.value)
+      this.user.gender = data.value
+      this.showGender = false
     }
   },
   created () {

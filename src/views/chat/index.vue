@@ -43,12 +43,21 @@
 </template>
 
 <script>
+import io from 'socket.io-client'
 export default {
   name: 'UserChat',
   data () {
     return {
       message: ''
     }
+  },
+  created () {
+    // 安装/导入/传入地址建立socket连接
+    const socket = io('http://ttapi.research.itcast.cn')
+
+    socket.on('connect', function () { // 连接成功回调
+      console.log('建立连接成功')
+    })
   }
 }
 </script>

@@ -13,9 +13,9 @@
     <div class="message-list" ref="message-list">
       <div
         class="message-item"
-        :class="{ reverse: item % 3 === 0 }"
-        v-for="item in 20"
-        :key="item"
+        :class="{ reverse: item.isMe }"
+        v-for="(item,index) in msgList "
+        :key="index"
       >
         <van-image
           class="avatar"
@@ -26,7 +26,7 @@
           src="https://img.yzcdn.cn/vant/cat.jpeg"
         />
         <div class="title">
-          <span>{{ `hello${item}` }}</span>
+          <span>{{item.msg}}</span>
         </div>
       </div>
     </div>
@@ -51,7 +51,8 @@ export default {
   data () {
     return {
       message: '',
-      socket: ''
+      socket: '',
+      msgList: []
     }
   },
   created () {
@@ -68,16 +69,22 @@ export default {
     // window.socket = socket暴露全局进行log测试
 
     // 接收消息 socket.on('type', data => console.log(data))
-    socket.on('message', msg => console.log('message =>', msg))
+    // socket.on('message', msg => console.log('message =>', msg))
+    // 同样对接收到的消息进行存储
+    socket.on('message', msg => this.msgList.push(msg))
   },
   methods: {
     onSend () {
       const message = this.message
-      if (!message.length) {
+      if (!message.length) { // 判断非空
         return
       }
-      // **消息类型 数据格式 接口都有要求**
-      this.socket.emit('message', { msg: message, timestamp: Date.now() })
+      // **消息类型 数据格式 接口都有要求** 自设isMe=true实现判断
+      const data = { msg: message, timestamp: Date.now(), isMe: true }// 消息内容
+      this.socket.emit('message', data)// 发送
+
+      // 储存至列表
+      this.msgList.push(data)
 
       this.message = '' // 置空文本框
     }

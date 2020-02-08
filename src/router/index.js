@@ -42,6 +42,12 @@ const routes = [
     component: () => import('@/views/search')
   },
   {
+    path: '/user/chat', // 我的作品
+    name: 'userChat',
+    component: () => import('@/views/chat'),
+    props: true
+  },
+  {
     path: '/article/:id',
     name: 'article',
     component: () => import('@/views/article'),

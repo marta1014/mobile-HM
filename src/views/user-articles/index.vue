@@ -43,6 +43,7 @@ export default {
 
 <style lang="less" scoped>
 .user-articles{
+    padding-top: 90px;
      /deep/ .van-tabs__wrap{
     position: fixed;
     top: 46px;

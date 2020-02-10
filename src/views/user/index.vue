@@ -105,7 +105,7 @@ export default {
         const { data } = res.data
         this.user = data
       } catch (error) {
-        console.log(error)
+        // console.log(error)
       }
     },
     logout () {

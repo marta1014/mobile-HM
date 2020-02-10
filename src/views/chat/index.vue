@@ -63,7 +63,7 @@ export default {
     this.socket = socket// 存储
 
     socket.on('connect', function () { // 连接成功回调
-      console.log('建立连接成功')
+      // console.log('建立连接成功')
     })
 
     // 发送消息 socket.emit('type', content)

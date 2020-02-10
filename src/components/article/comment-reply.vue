@@ -127,7 +127,7 @@ export default {
 
         this.showPopup = false
       } catch (error) {
-        console.log(error)
+        // console.log(error)
 
         this.$toast.fail('发布失败')
       }

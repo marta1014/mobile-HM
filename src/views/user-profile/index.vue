@@ -133,7 +133,7 @@ export default {
         const { data } = await getUserProfile()
         this.user = data.data
       } catch (error) {
-        console.log((error))
+        // console.log((error))
       }
     },
     onFileSelect () {
@@ -170,7 +170,7 @@ export default {
         this.previewShow = false
         this.user.photo = data.data.photo
       } catch (error) {
-        console.log(error)
+        // console.log(error)
         this.$toast.fail('更新失败')
       }
       // 3.根据相应结果后续处理

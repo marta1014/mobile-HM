@@ -64,7 +64,7 @@ export default {
           const { data } = await getChannels()
           this.channels = data.data.channels
         } catch (error) {
-          console.log(error)
+          // console.log(error)
         }
       }
     }

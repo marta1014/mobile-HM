@@ -204,7 +204,7 @@ export default {
           this.$toast.success('收藏成功')
         }
       } catch (error) {
-        console.log(error)
+        // console.log(error)
         this.$toast.fail('操作失败')
       }
     },
@@ -225,7 +225,7 @@ export default {
           this.$toast.success('点赞成功')
         }
       } catch (error) {
-        console.log(error)
+        // console.log(error)
         this.$toast.fail('操作失败')
       }
     },
@@ -240,7 +240,7 @@ export default {
         // 更新视图
         this.arDetails.is_followed = !this.arDetails.is_followed
       } catch (error) {
-        console.log(error)
+        // console.log(error)
         this.$toast.fail('操作失败')
       }
       this.followLoading = false
@@ -292,7 +292,7 @@ export default {
 
         this.showPopup = false
       } catch (error) {
-        console.log(error)
+        // console.log(error)
 
         this.$toast.fail('发布失败')
       }

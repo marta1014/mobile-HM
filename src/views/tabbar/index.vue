@@ -1,6 +1,8 @@
 <template>
   <div class="tab-bar">
-    <router-view></router-view>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
     <van-tabbar route="">
       <van-tabbar-item to="/" icon="home-o">首页</van-tabbar-item>
       <van-tabbar-item to="/qa" icon="comment-o">问答</van-tabbar-item>

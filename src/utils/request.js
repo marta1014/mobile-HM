@@ -71,7 +71,7 @@ request.interceptors.response.use(function (response) {
         method: 'put',
         url: 'http://ttapi.research.itcast.cn/app/v1_0/authorizations',
         headers: {
-          Authorizations: `Bearer ${user.refresh_token}`
+          Authorization: `Bearer ${user.refresh_token}`
         }
       })
       // console.log(data)
@@ -93,7 +93,7 @@ request.interceptors.response.use(function (response) {
 
 function redirectLogin () { // 跳转登陆页
   router.push({
-    name: '/login',
+    name: 'login',
     // query 参数会以？key=value&key=value的形式添加到url上
     query: {
       // 使用query参数把要跳转回来的路由地址传递给了登陆页面

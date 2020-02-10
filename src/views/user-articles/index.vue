@@ -37,6 +37,15 @@ export default {
     //   routes: ['collect', 'history']
       active
     }
+  },
+  // 当前页面路由跳转的时候 会触发该钩子 vue-router的
+  beforeRouteLeave (to, from, next) {
+    if (to.name === 'article') {
+      this.$store.commit('addPages', 'userArticle')
+    } else {
+      this.$store.commit('removePages', 'userArticle')
+    }
+    next()
   }
 }
 </script>

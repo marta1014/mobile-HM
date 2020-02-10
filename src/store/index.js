@@ -7,7 +7,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     // user: null// 默认null 登陆后存token
-    user: getItem('user')
+    user: getItem('user'),
+    catchPages: ['tabbar']
   },
   mutations: {
 
@@ -19,6 +20,19 @@ export default new Vuex.Store({
       }
       state.user = data
       setItem('user', state.user)
+    },
+    // 添加缓存页面
+    addPages (state, name) {
+      if (!state.catchPages.includes(name)) {
+        state.catchPages.push(name)
+      }
+    },
+    // 移除缓存页面
+    removePages (state, name) {
+      const index = state.catchPages.indexOf(name)
+      if (index !== -1) {
+        state.catchPages.splice(index)
+      }
     }
   },
   actions: {

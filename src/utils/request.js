@@ -4,6 +4,7 @@
 import axios from 'axios'
 import jsonBig from 'json-bigint'
 import store from '@/store'
+import router from '@/router'
 
 // axios.create 方法：复制一个 axios
 const request = axios.create({
@@ -51,9 +52,55 @@ request.interceptors.response.use(function (response) {
   // Any status code that lie within the range of 2xx cause this function to trigger
   // Do something with response data
   return response
-}, function (error) {
+}, async function (error) {
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   // Do something with response error
+  if (error.response && error.response.status === 401) {
+    // 1.如果没有refresh token 跳转登陆页
+    const user = store.state.user
+    if (!user || !user.refresh_token) {
+      redirectLogin()
+      return
+    }
+    // 2.如果有 则请求新的token
+    // 接口要求传refreshtoken
+    // 用request发请求需要判断
+    // 处理判断麻烦 用axios本身
+    try {
+      const { data } = await axios({
+        method: 'put',
+        url: 'http://ttapi.research.itcast.cn/app/v1_0/authorizations',
+        headers: {
+          Authorizations: `Bearer ${user.refresh_token}`
+        }
+      })
+      // console.log(data)
+      // 3.如果刷新成功 把新的更新 进容器中
+      store.commit('setUser', {
+        ...user, // 对象展开混入  原数据不变 更新token
+        token: data.data.token
+      })
+      // 4.把之前失败的请求继续发送出去
+      // error.congig 本次请求的相关配置
+      return request(error.config)
+    } catch (error) {
+      console.log(error, '刷新token失败')
+      redirectLogin()
+    }
+  }
   return Promise.reject(error)
 })
+
+function redirectLogin () { // 跳转登陆页
+  router.push({
+    name: '/login',
+    // query 参数会以？key=value&key=value的形式添加到url上
+    query: {
+      // 使用query参数把要跳转回来的路由地址传递给了登陆页面
+      // router.currentRouter当前路由对象  = this.$route
+      // 当前路由对象的地址
+      redirect: router.currentRoute.fullpath
+    }
+  })
+}
 export default request

@@ -82,7 +82,10 @@ export default {
       })
       try {
         this.$toast.success('登陆成功')
-        this.$router.push('/')
+
+        // 有来源页跳至来源页否则跳至登陆页
+        const redirect = this.$route.query.redirect || '/'
+        this.$router.push(redirect)
         const res = await login(user)
         // console.log(res)
         // 将登陆状态存储vuex容器中
